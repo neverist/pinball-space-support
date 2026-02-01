@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinball Space Estimator - Support</title>
+    <meta name="description" content="Scan your room with LiDAR and find out exactly how many pinball machines fit. Support page and documentation.">
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-dark: #1E3A8A;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06B6D4;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            padding: 80px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #1E3A8A, #3B82F6);
+            border-radius: 28px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 12px;
+        }
+        .hero .tagline {
+            font-size: 1.3rem;
+            color: rgba(255,255,255,0.85);
+            margin-bottom: 30px;
+        }
+        .app-store-badge {
+            display: inline-block;
+            background: #000;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        .app-store-badge:hover {
+            transform: scale(1.05);
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            color: var(--text);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+        }
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            color: var(--text);
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        .faq {
+            margin-bottom: 60px;
+        }
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+        .faq-question {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        .faq-item.active .faq-question::after {
+            content: '−';
+        }
+        .faq-answer {
+            padding: 0 24px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s, padding 0.3s;
+        }
+        .faq-item.active .faq-answer {
+            padding: 0 24px 20px;
+            max-height: 300px;
+        }
+        .faq-answer p {
+            color: var(--text-muted);
+        }
+        .requirements {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 60px;
+        }
+        .requirements h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .requirements ul {
+            list-style: none;
+        }
+        .requirements li {
+            padding: 12px 0;
+            padding-left: 30px;
+            position: relative;
+            color: var(--text-muted);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .requirements li:last-child {
+            border-bottom: none;
+        }
+        .requirements li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .contact {
+            background: linear-gradient(135deg, var(--card-bg), rgba(59, 130, 246, 0.1));
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        .contact h2 {
+            margin-bottom: 16px;
+        }
+        .contact p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+        .contact a {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        .contact a:hover {
+            background: #2563EB;
+        }
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+        .footer-links {
+            margin-top: 16px;
+        }
+        .footer-links a {
+            margin: 0 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <div class="app-icon">🎱</div>
+            <h1>Pinball Space Estimator</h1>
+            <p class="tagline">Scan your room. See how many machines fit.</p>
+            <a href="#" class="app-store-badge">Download on the App Store</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Features</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3>LiDAR Scanning</h3>
+                <p>Use your iPhone's LiDAR scanner for accurate room measurements in seconds.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Smart Placement</h3>
+                <p>Automatically calculates optimal machine positions with proper spacing.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👓</div>
+                <h3>AR Visualization</h3>
+                <p>See exactly where each machine will go with augmented reality.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚙️</div>
+                <h3>Multiple Modes</h3>
+                <p>Home game room or arcade spacing. Standard, widebody, or compact machines.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq">
+            <div class="faq-item">
+                <div class="faq-question">Which iPhones are supported?</div>
+                <div class="faq-answer">
+                    <p>Pinball Space Estimator requires an iPhone with LiDAR scanner: iPhone 12 Pro, iPhone 12 Pro Max, iPhone 13 Pro, iPhone 13 Pro Max, iPhone 14 Pro, iPhone 14 Pro Max, iPhone 15 Pro, or iPhone 15 Pro Max. iPad Pro models with LiDAR are also supported.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Can I use it without LiDAR?</div>
+                <div class="faq-answer">
+                    <p>Yes! You can manually enter your room dimensions if your device doesn't have a LiDAR scanner. You just won't be able to use the AR visualization feature.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">What machine sizes are supported?</div>
+                <div class="faq-answer">
+                    <p>We support three standard sizes: Standard (28.5" × 52"), Widebody (27" × 56"), and Compact (22" × 42"). These cover the vast majority of pinball machines ever made.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">How accurate is the measurement?</div>
+                <div class="faq-answer">
+                    <p>LiDAR scanning is highly accurate, typically within 1-2% of actual measurements. The app uses Apple's RoomPlan framework which is specifically designed for precise spatial scanning.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">Is my data private?</div>
+                <div class="faq-answer">
+                    <p>Absolutely. All scanning and processing happens entirely on your device. We don't collect, store, or transmit any data. See our <a href="privacy-policy.html">Privacy Policy</a> for full details.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="requirements">
+            <h2>Requirements</h2>
+            <ul>
+                <li>iPhone 12 Pro or later (for LiDAR scanning)</li>
+                <li>iOS 17.0 or later</li>
+                <li>Any iPhone with iOS 17+ (for manual entry mode)</li>
+                <li>Camera access permission</li>
+            </ul>
+        </div>
+
+        <div class="contact">
+            <h2>Need Help?</h2>
+            <p>Have questions, feedback, or running into issues? We're here to help!</p>
+            <a href="mailto:support@pinballspaceestimator.com">Contact Support</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2026 Pinball Space Estimator. All rights reserved.</p>
+        <div class="footer-links">
+            <a href="privacy-policy.html">Privacy Policy</a>
+            <a href="mailto:support@pinballspaceestimator.com">Contact</a>
+        </div>
+    </div>
+
+    <script>
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+
+                // Close all
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                // Open clicked if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
