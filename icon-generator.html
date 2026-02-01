@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinball Space Estimator - App Icon Generator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .canvas-container {
+            background: #0d0d1a;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+        canvas {
+            border-radius: 12px;
+        }
+        button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            margin: 10px;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2563EB;
+        }
+        .instructions {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            margin-top: 30px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #3B82F6;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+        code {
+            background: #0d0d1a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Pinball Space Estimator</h1>
+    <p>App Icon Generator - 1024x1024 PNG</p>
+
+    <div class="canvas-container">
+        <canvas id="iconCanvas" width="1024" height="1024"></canvas>
+    </div>
+
+    <div>
+        <button onclick="downloadIcon()">Download Icon (PNG)</button>
+        <button onclick="regenerate()">Regenerate</button>
+    </div>
+
+    <div class="instructions">
+        <h3>Instructions</h3>
+        <ol>
+            <li>Click <strong>Download Icon (PNG)</strong> to save the 1024x1024 icon</li>
+            <li>Rename the file to <code>AppIcon.png</code></li>
+            <li>Copy it to: <code>PinballSpaceEstimator/Assets.xcassets/AppIcon.appiconset/</code></li>
+            <li>Update <code>Contents.json</code> to reference the filename</li>
+            <li>Build and run in Xcode to verify</li>
+        </ol>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('iconCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function drawIcon() {
+            const size = 1024;
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#1E3A8A');
+            gradient.addColorStop(1, '#3B82F6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Subtle grid pattern
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+            ctx.lineWidth = 2;
+            const gridSpacing = 80;
+            for (let x = gridSpacing; x < size; x += gridSpacing) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, size);
+                ctx.stroke();
+            }
+            for (let y = gridSpacing; y < size; y += gridSpacing) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(size, y);
+                ctx.stroke();
+            }
+
+            // AR corner brackets
+            const bracketPadding = 100;
+            const bracketLength = 120;
+            const bracketGradient = ctx.createLinearGradient(0, bracketPadding, 0, size - bracketPadding);
+            bracketGradient.addColorStop(0, '#06B6D4');
+            bracketGradient.addColorStop(1, 'rgba(6, 182, 212, 0.4)');
+            ctx.strokeStyle = bracketGradient;
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+
+            // Top-left
+            ctx.beginPath();
+            ctx.moveTo(bracketPadding, bracketPadding + bracketLength);
+            ctx.lineTo(bracketPadding, bracketPadding);
+            ctx.lineTo(bracketPadding + bracketLength, bracketPadding);
+            ctx.stroke();
+
+            // Top-right
+            ctx.beginPath();
+            ctx.moveTo(size - bracketPadding - bracketLength, bracketPadding);
+            ctx.lineTo(size - bracketPadding, bracketPadding);
+            ctx.lineTo(size - bracketPadding, bracketPadding + bracketLength);
+            ctx.stroke();
+
+            // Bottom-right
+            ctx.beginPath();
+            ctx.moveTo(size - bracketPadding, size - bracketPadding - bracketLength);
+            ctx.lineTo(size - bracketPadding, size - bracketPadding);
+            ctx.lineTo(size - bracketPadding - bracketLength, size - bracketPadding);
+            ctx.stroke();
+
+            // Bottom-left
+            ctx.beginPath();
+            ctx.moveTo(bracketPadding + bracketLength, size - bracketPadding);
+            ctx.lineTo(bracketPadding, size - bracketPadding);
+            ctx.lineTo(bracketPadding, size - bracketPadding - bracketLength);
+            ctx.stroke();
+
+            // Glow effect
+            const glowGradient = ctx.createRadialGradient(size/2, size/2 + 50, 50, size/2, size/2 + 50, 350);
+            glowGradient.addColorStop(0, 'rgba(96, 165, 250, 0.3)');
+            glowGradient.addColorStop(1, 'rgba(96, 165, 250, 0)');
+            ctx.fillStyle = glowGradient;
+            ctx.fillRect(0, 0, size, size);
+
+            // Pinball machine - centered
+            const machineX = size / 2;
+            const machineY = size / 2 + 40;
+
+            // Machine shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+            drawPinballMachine(ctx, machineX + 8, machineY + 8, 1);
+
+            // Machine body
+            const machineGradient = ctx.createLinearGradient(machineX - 200, machineY - 300, machineX + 200, machineY + 300);
+            machineGradient.addColorStop(0, '#FFFFFF');
+            machineGradient.addColorStop(1, '#E2E8F0');
+            ctx.fillStyle = machineGradient;
+            drawPinballMachine(ctx, machineX, machineY, 1);
+        }
+
+        function drawPinballMachine(ctx, x, y, scale) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            // Legs
+            ctx.fillRect(-140, 180, 25, 120);
+            ctx.fillRect(115, 180, 25, 120);
+
+            // Cabinet body (trapezoid shape)
+            ctx.beginPath();
+            ctx.moveTo(-160, -120);
+            ctx.lineTo(160, -120);
+            ctx.lineTo(140, 200);
+            ctx.lineTo(-140, 200);
+            ctx.closePath();
+            ctx.fill();
+
+            // Backbox
+            ctx.beginPath();
+            roundRect(ctx, -130, -330, 260, 180, 15);
+            ctx.fill();
+
+            // Backbox display (dark)
+            ctx.fillStyle = 'rgba(30, 58, 138, 0.9)';
+            ctx.beginPath();
+            roundRect(ctx, -110, -310, 220, 120, 10);
+            ctx.fill();
+
+            // Display content - score style dots
+            ctx.fillStyle = '#FCD34D';
+            for (let row = 0; row < 3; row++) {
+                for (let col = 0; col < 5; col++) {
+                    ctx.beginPath();
+                    ctx.arc(-70 + col * 35, -270 + row * 35, 8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            // Playfield glass (angled)
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.beginPath();
+            ctx.moveTo(-140, -100);
+            ctx.lineTo(140, -100);
+            ctx.lineTo(120, 100);
+            ctx.lineTo(-120, 100);
+            ctx.closePath();
+            ctx.fill();
+
+            // Playfield features
+            ctx.fillStyle = 'rgba(59, 130, 246, 0.5)';
+            ctx.beginPath();
+            ctx.arc(0, -20, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(239, 68, 68, 0.5)';
+            ctx.beginPath();
+            ctx.arc(-60, 40, 20, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(60, 40, 20, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Flippers
+            ctx.fillStyle = 'rgba(30, 58, 138, 0.8)';
+            ctx.beginPath();
+            ctx.moveTo(-80, 140);
+            ctx.lineTo(-20, 160);
+            ctx.lineTo(-20, 170);
+            ctx.lineTo(-80, 160);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(80, 140);
+            ctx.lineTo(20, 160);
+            ctx.lineTo(20, 170);
+            ctx.lineTo(80, 160);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function roundRect(ctx, x, y, width, height, radius) {
+            ctx.moveTo(x + radius, y);
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            ctx.lineTo(x + width, y + height - radius);
+            ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            ctx.lineTo(x + radius, y + height);
+            ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+        }
+
+        function downloadIcon() {
+            const link = document.createElement('a');
+            link.download = 'AppIcon.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        function regenerate() {
+            drawIcon();
+        }
+
+        // Initial draw
+        drawIcon();
+    </script>
+</body>
+</html>
