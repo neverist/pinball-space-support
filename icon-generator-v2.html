@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PinFit - App Icon Generator v2</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            min-height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #3B82F6;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+        .canvas-row {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .canvas-container {
+            background: #0d0d1a;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+        }
+        .canvas-container.selected {
+            outline: 3px solid #3B82F6;
+        }
+        .canvas-label {
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        canvas {
+            border-radius: 12px;
+            cursor: pointer;
+        }
+        canvas:hover {
+            opacity: 0.9;
+        }
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            background: #3B82F6;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2563EB;
+        }
+        button.secondary {
+            background: #374151;
+        }
+        button.secondary:hover {
+            background: #4B5563;
+        }
+        .instructions {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 800px;
+            margin-top: 30px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #3B82F6;
+        }
+        .instructions ol {
+            line-height: 1.8;
+        }
+        code {
+            background: #0d0d1a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .concept-name {
+            color: #10B981;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PinFit</h1>
+    <div class="subtitle">App Icon Generator v2 - New Concepts</div>
+    <p>Click any icon to select, then download as 1024x1024 PNG</p>
+
+    <div class="canvas-row">
+        <div class="canvas-container selected" id="container1" onclick="selectIcon(1)">
+            <div class="concept-name">Pin + Checkmark</div>
+            <canvas id="iconCanvas1" width="256" height="256"></canvas>
+            <div class="canvas-label">Recommended</div>
+        </div>
+        <div class="canvas-container" id="container2" onclick="selectIcon(2)">
+            <div class="concept-name">Measuring Ball</div>
+            <canvas id="iconCanvas2" width="256" height="256"></canvas>
+            <div class="canvas-label">AR Focus</div>
+        </div>
+        <div class="canvas-container" id="container3" onclick="selectIcon(3)">
+            <div class="concept-name">Ball in Box</div>
+            <canvas id="iconCanvas3" width="256" height="256"></canvas>
+            <div class="canvas-label">Minimalist</div>
+        </div>
+        <div class="canvas-container" id="container4" onclick="selectIcon(4)">
+            <div class="concept-name">Grid Drop</div>
+            <canvas id="iconCanvas4" width="256" height="256"></canvas>
+            <div class="canvas-label">Dynamic</div>
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button onclick="downloadIcon()">Download Selected Icon (1024px)</button>
+        <button class="secondary" onclick="downloadAll()">Download All Icons</button>
+    </div>
+
+    <div class="instructions">
+        <h3>Instructions</h3>
+        <ol>
+            <li>Click an icon concept above to select it</li>
+            <li>Click <strong>Download Selected Icon</strong> to save at 1024x1024</li>
+            <li>Rename the file to <code>AppIcon.png</code></li>
+            <li>Copy it to: <code>PinballSpaceEstimator/Assets.xcassets/AppIcon.appiconset/</code></li>
+            <li>Build and run in Xcode to verify</li>
+        </ol>
+    </div>
+
+    <!-- Hidden canvas for high-res export -->
+    <canvas id="exportCanvas" width="1024" height="1024" style="display: none;"></canvas>
+
+    <script>
+        let selectedIcon = 1;
+
+        function selectIcon(num) {
+            selectedIcon = num;
+            document.querySelectorAll('.canvas-container').forEach((c, i) => {
+                c.classList.toggle('selected', i + 1 === num);
+            });
+        }
+
+        // ========== CONCEPT 1: Pin + Checkmark ==========
+        function drawConcept1(ctx, size) {
+            const scale = size / 1024;
+            ctx.save();
+            ctx.scale(scale, scale);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, '#1E3A8A');
+            gradient.addColorStop(1, '#3B82F6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Subtle radial glow
+            const glow = ctx.createRadialGradient(512, 480, 50, 512, 480, 450);
+            glow.addColorStop(0, 'rgba(96, 165, 250, 0.3)');
+            glow.addColorStop(1, 'rgba(96, 165, 250, 0)');
+            ctx.fillStyle = glow;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Silver pinball with gradient
+            const ballX = 480, ballY = 420, ballR = 280;
+            const ballGradient = ctx.createRadialGradient(
+                ballX - 80, ballY - 100, 20,
+                ballX, ballY, ballR
+            );
+            ballGradient.addColorStop(0, '#FFFFFF');
+            ballGradient.addColorStop(0.3, '#E8E8E8');
+            ballGradient.addColorStop(0.7, '#B0B0B0');
+            ballGradient.addColorStop(1, '#808080');
+
+            // Ball shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.arc(ballX + 15, ballY + 20, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Main ball
+            ctx.fillStyle = ballGradient;
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ball highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(ballX - 100, ballY - 120, 60, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Checkmark - positioned at bottom right of ball
+            ctx.strokeStyle = '#10B981';
+            ctx.lineWidth = 65;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+
+            ctx.beginPath();
+            ctx.moveTo(520, 680);
+            ctx.lineTo(620, 780);
+            ctx.lineTo(820, 520);
+            ctx.stroke();
+
+            // Checkmark glow
+            ctx.strokeStyle = 'rgba(16, 185, 129, 0.4)';
+            ctx.lineWidth = 90;
+            ctx.beginPath();
+            ctx.moveTo(520, 680);
+            ctx.lineTo(620, 780);
+            ctx.lineTo(820, 520);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        // ========== CONCEPT 2: Measuring Ball with AR Brackets ==========
+        function drawConcept2(ctx, size) {
+            const scale = size / 1024;
+            ctx.save();
+            ctx.scale(scale, scale);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, '#1E3A8A');
+            gradient.addColorStop(1, '#3B82F6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Grid pattern
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            ctx.lineWidth = 2;
+            for (let i = 80; i < 1024; i += 80) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, 1024);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(1024, i);
+                ctx.stroke();
+            }
+
+            // AR corner brackets
+            const padding = 140, length = 150;
+            ctx.strokeStyle = '#06B6D4';
+            ctx.lineWidth = 12;
+            ctx.lineCap = 'round';
+
+            // Top-left
+            ctx.beginPath();
+            ctx.moveTo(padding, padding + length);
+            ctx.lineTo(padding, padding);
+            ctx.lineTo(padding + length, padding);
+            ctx.stroke();
+
+            // Top-right
+            ctx.beginPath();
+            ctx.moveTo(1024 - padding - length, padding);
+            ctx.lineTo(1024 - padding, padding);
+            ctx.lineTo(1024 - padding, padding + length);
+            ctx.stroke();
+
+            // Bottom-right
+            ctx.beginPath();
+            ctx.moveTo(1024 - padding, 1024 - padding - length);
+            ctx.lineTo(1024 - padding, 1024 - padding);
+            ctx.lineTo(1024 - padding - length, 1024 - padding);
+            ctx.stroke();
+
+            // Bottom-left
+            ctx.beginPath();
+            ctx.moveTo(padding + length, 1024 - padding);
+            ctx.lineTo(padding, 1024 - padding);
+            ctx.lineTo(padding, 1024 - padding - length);
+            ctx.stroke();
+
+            // Silver pinball centered
+            const ballX = 512, ballY = 512, ballR = 220;
+            const ballGradient = ctx.createRadialGradient(
+                ballX - 60, ballY - 80, 20,
+                ballX, ballY, ballR
+            );
+            ballGradient.addColorStop(0, '#FFFFFF');
+            ballGradient.addColorStop(0.4, '#D0D0D0');
+            ballGradient.addColorStop(1, '#707070');
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+            ctx.beginPath();
+            ctx.arc(ballX + 10, ballY + 15, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = ballGradient;
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.beginPath();
+            ctx.arc(ballX - 70, ballY - 90, 45, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        // ========== CONCEPT 3: Ball in Box ==========
+        function drawConcept3(ctx, size) {
+            const scale = size / 1024;
+            ctx.save();
+            ctx.scale(scale, scale);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, '#1E3A8A');
+            gradient.addColorStop(1, '#3B82F6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Room outline (white square)
+            const boxPadding = 180;
+            const boxSize = 1024 - boxPadding * 2;
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.lineWidth = 16;
+            ctx.strokeRect(boxPadding, boxPadding, boxSize, boxSize);
+
+            // Ball that "fits" perfectly (touches all sides)
+            const ballX = 512, ballY = 512;
+            const ballR = boxSize / 2 - 8; // Slightly smaller than box
+
+            const ballGradient = ctx.createRadialGradient(
+                ballX - 80, ballY - 100, 30,
+                ballX, ballY, ballR
+            );
+            ballGradient.addColorStop(0, '#FFFFFF');
+            ballGradient.addColorStop(0.3, '#E0E0E0');
+            ballGradient.addColorStop(0.7, '#A0A0A0');
+            ballGradient.addColorStop(1, '#606060');
+
+            ctx.fillStyle = ballGradient;
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+            ctx.beginPath();
+            ctx.arc(ballX - 100, ballY - 120, 70, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Small "fit" indicator lines at corners
+            ctx.strokeStyle = '#10B981';
+            ctx.lineWidth = 8;
+            const cornerLen = 40;
+
+            // Show where ball meets box edges
+            [[boxPadding + cornerLen, boxPadding], [boxPadding, boxPadding + cornerLen]].forEach(([x, y]) => {
+                ctx.beginPath();
+                ctx.moveTo(boxPadding, boxPadding);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            });
+
+            ctx.restore();
+        }
+
+        // ========== CONCEPT 4: Grid Drop ==========
+        function drawConcept4(ctx, size) {
+            const scale = size / 1024;
+            ctx.save();
+            ctx.scale(scale, scale);
+
+            // Background gradient
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 1024);
+            gradient.addColorStop(0, '#1E3A8A');
+            gradient.addColorStop(1, '#3B82F6');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 1024);
+
+            // Grid lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 3;
+            for (let i = 100; i < 1024; i += 100) {
+                ctx.beginPath();
+                ctx.moveTo(i, 0);
+                ctx.lineTo(i, 1024);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i);
+                ctx.lineTo(1024, i);
+                ctx.stroke();
+            }
+
+            // Impact ripples
+            const centerX = 512, centerY = 550;
+            for (let r = 350; r >= 150; r -= 70) {
+                ctx.strokeStyle = `rgba(6, 182, 212, ${0.1 + (350 - r) / 500})`;
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // Silver pinball
+            const ballX = 512, ballY = 480, ballR = 200;
+            const ballGradient = ctx.createRadialGradient(
+                ballX - 50, ballY - 70, 20,
+                ballX, ballY, ballR
+            );
+            ballGradient.addColorStop(0, '#FFFFFF');
+            ballGradient.addColorStop(0.35, '#E0E0E0');
+            ballGradient.addColorStop(0.7, '#A8A8A8');
+            ballGradient.addColorStop(1, '#686868');
+
+            // Shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.ellipse(ballX, centerY + 180, ballR * 0.9, 40, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Ball
+            ctx.fillStyle = ballGradient;
+            ctx.beginPath();
+            ctx.arc(ballX, ballY, ballR, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Highlight
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+            ctx.beginPath();
+            ctx.arc(ballX - 60, ballY - 80, 50, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Motion lines above ball
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.lineWidth = 8;
+            ctx.lineCap = 'round';
+            for (let i = -60; i <= 60; i += 60) {
+                ctx.beginPath();
+                ctx.moveTo(ballX + i, ballY - ballR - 40);
+                ctx.lineTo(ballX + i, ballY - ballR - 120);
+                ctx.stroke();
+            }
+
+            ctx.restore();
+        }
+
+        // Draw all preview icons
+        function drawAllPreviews() {
+            drawConcept1(document.getElementById('iconCanvas1').getContext('2d'), 256);
+            drawConcept2(document.getElementById('iconCanvas2').getContext('2d'), 256);
+            drawConcept3(document.getElementById('iconCanvas3').getContext('2d'), 256);
+            drawConcept4(document.getElementById('iconCanvas4').getContext('2d'), 256);
+        }
+
+        // Download selected icon at full resolution
+        function downloadIcon() {
+            const exportCanvas = document.getElementById('exportCanvas');
+            const ctx = exportCanvas.getContext('2d');
+            ctx.clearRect(0, 0, 1024, 1024);
+
+            switch(selectedIcon) {
+                case 1: drawConcept1(ctx, 1024); break;
+                case 2: drawConcept2(ctx, 1024); break;
+                case 3: drawConcept3(ctx, 1024); break;
+                case 4: drawConcept4(ctx, 1024); break;
+            }
+
+            const link = document.createElement('a');
+            const names = ['PinCheckmark', 'MeasuringBall', 'BallInBox', 'GridDrop'];
+            link.download = `AppIcon-${names[selectedIcon - 1]}.png`;
+            link.href = exportCanvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Download all icons
+        function downloadAll() {
+            const exportCanvas = document.getElementById('exportCanvas');
+            const ctx = exportCanvas.getContext('2d');
+            const names = ['PinCheckmark', 'MeasuringBall', 'BallInBox', 'GridDrop'];
+            const drawFuncs = [drawConcept1, drawConcept2, drawConcept3, drawConcept4];
+
+            drawFuncs.forEach((draw, i) => {
+                ctx.clearRect(0, 0, 1024, 1024);
+                draw(ctx, 1024);
+
+                const link = document.createElement('a');
+                link.download = `AppIcon-${names[i]}.png`;
+                link.href = exportCanvas.toDataURL('image/png');
+
+                setTimeout(() => link.click(), i * 500);
+            });
+        }
+
+        // Initial draw
+        drawAllPreviews();
+    </script>
+</body>
+</html>
